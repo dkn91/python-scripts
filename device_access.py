@@ -30,6 +30,6 @@ def main(cmd):
 	device.connect_device()
 	device.rundevicecmd(cmd)
 
-cmd= sys.argv[0]
+cmd= sys.argv[1]
 if __name__ == '__main__':
 	main(cmd)
