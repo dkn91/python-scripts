@@ -58,6 +58,7 @@ class downloader(QDialog):
         read_so_far = blocknum * blocksize
         if totalsize > 0:
             percent = read_so_far * 100 / totalsize
+            self.progress.setValue(int(percent))
 
 
 app = QApplication(sys.argv)
