@@ -1,0 +1,66 @@
+'''importing all esesntail Qt
+modules'''
+
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+import sys
+import urllib.request
+
+
+class downloader(QDialog):
+    '''defining a class to iniate desktop app
+    body and its content'''
+    def __init__(self):
+        '''constructor for hw class'''
+        QDialog.__init__(self)  # inherits QDialogs constructor
+
+        layout = QGridLayout()  # defining grid layout format for deskapp
+
+        label = QLabel("This is a file Download app!")  #defining labels or static text to be displayed
+        self.url = QLineEdit()  #creating a text entry field
+        self.filesave_location = QLineEdit()
+        self.progress = QProgressBar()
+        download = QPushButton("Download")
+        close = QPushButton("Close")  #adding a push button
+
+        #adding strings to identify text boxes
+        self.url.setPlaceholderText("Enter the url here")
+        self.filesave_location.setPlaceholderText("Enter file save location here")
+
+        #progress bar to show current status
+        self.progress.setValue(0)
+        self.progress.setAlignment(Qt.AlignHCenter)
+        #pushing all objects as widgets on the app layout
+        layout.addWidget(label, 0, 1)
+        layout.addWidget(self.url, 1, 2)
+        layout.addWidget(self.filesave_location, 2, 2)
+        layout.addWidget(self.progress, 3, 1)
+        layout.addWidget(download, 4, 1)
+        layout.addWidget(close, 4, 2)
+
+        #adding events
+        self.setLayout(layout)
+        self.setWindowTitle("Downloader")
+        self.setFocus()
+
+        download.clicked.connect(self.download)  #call the download method when Download button is clicked
+        close.clicked.connect(self.close)
+
+    def download(self):
+        '''this method accepts url and file location entered by user and
+        downloads the file to that given location'''
+        url = self.url.text()
+        file_location = self.filesave_location.text()
+        urllib.request.urlretrieve(url, file_location,self.report)
+
+    def report(self, blocknum, blocksize, totalsize):
+        #reports the progress so far for file download
+        read_so_far = blocknum * blocksize
+        if totalsize > 0:
+            percent = read_so_far * 100 / totalsize
+
+
+app = QApplication(sys.argv)
+dialog = downloader()
+dialog.show()
+sys.exit(app.exec_())
